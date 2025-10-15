@@ -22,3 +22,23 @@ dev = [
     "ruff (>=0.14.0,<0.15.0)",
     "pre-commit (>=4.3.0,<5.0.0)"
 ]
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+skip-string-normalization = false
+
+# 🧠 Linting Rules — Ruff
+[tool.ruff]
+line-length = 100
+select = ["E", "F", "B", "I", "UP"]  # E=style, F=flakes, B=bugbear, I=isort, UP=pyupgrade
+ignore = ["E501"]
+fix = true
+show-fixes = true
+
+# 🧭 Import Sorting — Ruff (isort compatibility)
+[tool.ruff.lint.isort]
+known-first-party = ["src"]
+combine-as-imports = true
+lines-between-types = 1
+force-sort-within-sections = true
