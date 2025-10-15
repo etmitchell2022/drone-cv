@@ -9,6 +9,7 @@ Install Poetry (if not already installed):
 ```bash
 curl -sSL https://install.python-poetry.org | python3 -
 ```
+
 Verify installation:
 
 ```
@@ -26,6 +27,7 @@ Install dependencies:
 ```bash
 poetry install
 ```
+
 Activate virtual environment:
 
 ```bash
@@ -63,3 +65,28 @@ To run pre-commit hooks manually, run:
 ```bash
 poetry run pre-commit run --all-files
 ```
+
+After installation, each `git commit` will automatically run the pre-commit hooks.
+
+### 4. Pre-commit config file
+
+The pre-commit config file is located at [.pre-commit-config.yaml](.pre-commit-config.yaml). This file specifies the hooks to run and their configurations.
+
+Update hooks periodically
+
+```
+poetry run pre-commit autoupdate
+```
+
+### 5. Useful commands
+
+| Action                    | Command                                 |
+| ------------------------- | --------------------------------------- |
+| Install dependencies      | `poetry install`                        |
+| Enter virtual environment | `poetry shell`                          |
+| Format code               | `poetry run black .`                    |
+| Lint and autofix          | `poetry run ruff check --fix .`         |
+| Install pre-commit hooks  | `poetry run pre-commit install`         |
+| Run pre-commit manually   | `poetry run pre-commit run --all-files` |
+| Run tests                 | `poetry run pytest`                     |
+| Update pre-commit hooks   | `poetry run pre-commit autoupdate`      |
