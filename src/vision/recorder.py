@@ -5,7 +5,7 @@ import cv2
 
 
 def record_fpv(camera_index=0, output_file=None, fps=30):
-    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))  # Go up to project root
+    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
     videos_dir = os.path.join(base_dir, "videos")
     os.makedirs(videos_dir, exist_ok=True)
 
