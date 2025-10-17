@@ -22,7 +22,7 @@ def record_fpv(camera_index=0, output_file=None, fps=30):
     fourcc = cv2.VideoWriter_fourcc(*"mp4v")
     out = cv2.VideoWriter(output_file, fourcc, fps, (width, height))
 
-    print(f"Recording {width}x{height} at {fps} FPS to {output_file}. Press 'q' to stop.")
+    print(f"Recording {width}x{height} at {fps} FPS to {output_file}. Press 'q' to stop")
     while True:
         ret, frame = cap.read()
         if not ret:
