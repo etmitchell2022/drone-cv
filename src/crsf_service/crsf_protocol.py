@@ -1,6 +1,4 @@
-"""
-CRSF Protocol Frame Builder
-"""
+from src.crsf_service.exceptions import InvalidChannelCountError
 
 
 """
@@ -19,18 +17,18 @@ class CRSFProtocol:
         pass
 
     def build_rc_channels_frame(self, channels: list[int]) -> bytes:
-        channels = [992] * 16
+        if len(channels) != 16:
+            raise InvalidChannelCountError("Exactly 16 channels are required")
         
-        converted = 0
-        for i, channel in enumerate(channels):
-            converted |= channel << (i * 11)
-        print("Converted channels:", converted.to_bytes(22, 'little').hex(" "))
             
             
 
     def _pack_channels(self, channels: list[int]) -> bytes:
         # 16 channel values (11-bit each) -> 22 packed bytes
-        pass
+        converted = 0
+        for i, channel in enumerate(channels):
+            converted |= channel << (i * 11)
+        return converted.to_bytes(22, 'little').hex(" ")
 
     def _crc8(self, data: bytes) -> int:
         # some bytes in -> one CRC byte (0–255) out
@@ -39,4 +37,4 @@ class CRSFProtocol:
 
 if __name__ == "__main__":
     crsf = CRSFProtocol()
-    crsf.build_rc_channels_frame([1000, 1500, 2000] + [0] * 13)
+    crsf.build_rc_channels_frame([992] * 15)
