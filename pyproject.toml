@@ -18,12 +18,10 @@ pyserial = "^3.5"
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-[dependency-groups]
-dev = [
-    "black (>=25.9.0,<26.0.0)",
-    "ruff (>=0.14.0,<0.15.0)",
-    "pre-commit (>=4.3.0,<5.0.0)"
-]
+[tool.poetry.group.dev.dependencies]
+black = ">=25.9.0,<26.0.0"
+ruff = ">=0.14.0,<0.15.0"
+pre-commit = ">=4.3.0,<5.0.0"
 
 [tool.black]
 line-length = 100

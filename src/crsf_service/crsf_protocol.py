@@ -18,6 +18,9 @@ class CRSFProtocol:
     def build_rc_channels_frame(self, channels: list[int]) -> bytes:
         self._validate_channels(channels)
 
+        payload = self._pack_channels(channels)
+        print("Packed channels (hex):", payload.hex(" "))
+
     def _validate_channels(self, channels: list[int]):
         if len(channels) != 16:
             raise InvalidChannelCountError("Exactly 16 channels are required")
@@ -25,16 +28,13 @@ class CRSFProtocol:
         for ch in channels:
             if not (172 <= ch <= 1811):
                 raise InvalidChannelValueError(f"Channel value {ch} is out of range (172-1811)")
-        
-        packed_channels = self._pack_channels(channels)
-        print("Packed channels (hex):", packed_channels)
 
     def _pack_channels(self, channels: list[int]) -> bytes:
         # 16 channel values (11-bit each) -> 22 packed bytes
         converted = 0
         for i, channel in enumerate(channels):
             converted |= channel << (i * 11)
-        return converted.to_bytes(22, "little").hex(" ")
+        return converted.to_bytes(22, "little")
 
     def _crc8(self, data: bytes) -> int:
         # some bytes in -> one CRC byte (0–255) out
