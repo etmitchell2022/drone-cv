@@ -3,14 +3,28 @@ CRSF Protocol Frame Builder
 """
 
 
+"""
+Frame structure:
+
+- Start with 16 channels of 11 bits each (total 176 bits = 22 bytes)
+- Range of 172-1811 for each channel (centered around 992)
+- Shift each channel to its' own spot. Channel 0 stays at bit 0, channel 1 starts at bit 11, channel 2 at bit 22, etc.
+- Merge into one number. One number is 16X11 = 176 bits, which is 22 bytes.
+- Slice into 22 bytes, least significant byte first (little-endian)
+"""
+
+
 class CRSFProtocol:
     def __init__(self):
         pass
 
     def build_rc_channels_frame(self, channels: list[int]) -> bytes:
         channels = [992] * 16
+        
+        converted = 0
         for i, channel in enumerate(channels):
-            print(f"Channel {i+1}: {channel}")
+            converted |= channel << (i * 11)
+        print("Converted channels:", converted.to_bytes(22, 'little').hex(" "))
             
             
 
