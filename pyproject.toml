@@ -30,7 +30,7 @@ line-length = 100
 target-version = ["py311"]
 skip-string-normalization = false
 
-# 🧠 Linting Rules — Ruff
+# Linting Rules — Ruff
 [tool.ruff]
 line-length = 100
 select = ["E", "F", "B", "I", "UP"]  # E=style, F=flakes, B=bugbear, I=isort, UP=pyupgrade
@@ -38,7 +38,7 @@ ignore = ["E501"]
 fix = true
 show-fixes = true
 
-# 🧭 Import Sorting — Ruff (isort compatibility)
+# Import Sorting — Ruff (isort compatibility)
 [tool.ruff.lint.isort]
 known-first-party = ["src"]
 combine-as-imports = true
