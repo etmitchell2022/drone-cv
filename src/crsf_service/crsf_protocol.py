@@ -25,6 +25,9 @@ class CRSFProtocol:
         for ch in channels:
             if not (172 <= ch <= 1811):
                 raise InvalidChannelValueError(f"Channel value {ch} is out of range (172-1811)")
+        
+        packed_channels = self._pack_channels(channels)
+        print("Packed channels (hex):", packed_channels)
 
     def _pack_channels(self, channels: list[int]) -> bytes:
         # 16 channel values (11-bit each) -> 22 packed bytes
