@@ -23,6 +23,11 @@ class CRSFProtocol:
         
         crc = self._crc8(bytes([0x16]) + payload)
         print(f"CRC8: {crc:#04x}")
+        
+        frame = self._assemble_complete_frame(payload, crc)
+        print("Complete frame (hex):", frame.hex(" "))
+        
+        return frame
 
     def _validate_channels(self, channels: list[int]):
         if len(channels) != 16:
@@ -56,6 +61,10 @@ class CRSFProtocol:
                 crc &= 0xFF      # keep crc to a single byte (drop anything past bit 7)
 
         return crc               # final remainder = the checksum (0–255)
+    
+    def _assemble_complete_frame(self, payload: bytes, crc: int) -> bytes:
+        # Frame Structure: [0xC8, 0x18, 0x16, payload, crc]
+        return bytes([0xC8, 0x18, 0x16]) + payload + bytes([crc])
 
 
 if __name__ == "__main__":
