@@ -20,8 +20,8 @@ class CRSFProtocol:
 
         payload = self._pack_channels(channels)
         crc = self._crc8(bytes([0x16]) + payload)
-        frame = self._assemble_complete_frame(payload, crc)      
-          
+        frame = self._assemble_complete_frame(payload, crc)
+
         return frame
 
     def _validate_channels(self, channels: list[int]):
@@ -44,19 +44,19 @@ class CRSFProtocol:
         # Error detection byte: Did this frame arrive intact?
         crc = 0  # running remainder; starts empty, ends as the checksum
 
-        for byte in data:        # walk the data one byte at a time
-            crc ^= byte          # fold this byte into the remainder (XOR = mix it in)
+        for byte in data:  # walk the data one byte at a time
+            crc ^= byte  # fold this byte into the remainder (XOR = mix it in)
 
-            for _ in range(8):   # then grind through that byte one bit at a time
-                if crc & 0x80:               # top bit set? -> the divisor "goes in" here
+            for _ in range(8):  # then grind through that byte one bit at a time
+                if crc & 0x80:  # top bit set? -> the divisor "goes in" here
                     crc = (crc << 1) ^ 0xD5  # shift left, then subtract divisor (XOR 0xD5)
                 else:
-                    crc <<= 1                # divisor didn't go in -> just shift left
+                    crc <<= 1  # divisor didn't go in -> just shift left
 
-                crc &= 0xFF      # keep crc to a single byte (drop anything past bit 7)
+                crc &= 0xFF  # keep crc to a single byte (drop anything past bit 7)
 
-        return crc               # final remainder = the checksum (0–255)
-    
+        return crc  # final remainder = the checksum (0–255)
+
     def _assemble_complete_frame(self, payload: bytes, crc: int) -> bytes:
         # Frame Structure: [0xC8, 0x18, 0x16, payload, crc]
         return bytes([0xC8, 0x18, 0x16]) + payload + bytes([crc])
