@@ -20,6 +20,9 @@ class CRSFProtocol:
 
         payload = self._pack_channels(channels)
         print("Packed channels (hex):", payload.hex(" "))
+        
+        crc = self._crc8(bytes([0x16]) + payload)
+        print(f"CRC8: {crc:#04x}")
 
     def _validate_channels(self, channels: list[int]):
         if len(channels) != 16:
@@ -38,7 +41,21 @@ class CRSFProtocol:
 
     def _crc8(self, data: bytes) -> int:
         # some bytes in -> one CRC byte (0–255) out
-        pass
+        # Error detection byte: Did this frame arrive intact?
+        crc = 0  # running remainder; starts empty, ends as the checksum
+
+        for byte in data:        # walk the data one byte at a time
+            crc ^= byte          # fold this byte into the remainder (XOR = mix it in)
+
+            for _ in range(8):   # then grind through that byte one bit at a time
+                if crc & 0x80:               # top bit set? -> the divisor "goes in" here
+                    crc = (crc << 1) ^ 0xD5  # shift left, then subtract divisor (XOR 0xD5)
+                else:
+                    crc <<= 1                # divisor didn't go in -> just shift left
+
+                crc &= 0xFF      # keep crc to a single byte (drop anything past bit 7)
+
+        return crc               # final remainder = the checksum (0–255)
 
 
 if __name__ == "__main__":
