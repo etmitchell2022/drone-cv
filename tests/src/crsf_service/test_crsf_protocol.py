@@ -6,11 +6,10 @@ class TestCRSFProtocol:
     def setup_method(self):
         self.protocol = CRSFProtocol()
 
-    def test_valid_channels(self):
-        channels = [992] * 16  # All channels at center value
-        frame = self.protocol.build_rc_channels_frame(channels)
-        assert isinstance(frame, bytes)
-        assert len(frame) == 26  # 3 bytes for header, 22 for payload, 1 for CRC
+    def test_center_channels_produce_correct_frame(self):
+        frame = self.protocol.build_rc_channels_frame([992] * 16)
+        expected = bytes.fromhex("c8 18 16 e0 03 1f f8 c0 07 3e f0 81 0f 7c e0 03 1f f8 c0 07 3e f0 81 0f 7c ad")
+        assert frame == expected
 
     def test_too_few_channels(self):
         with pytest.raises(InvalidChannelCountError):
