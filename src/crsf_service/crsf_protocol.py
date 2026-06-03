@@ -19,14 +19,9 @@ class CRSFProtocol:
         self._validate_channels(channels)
 
         payload = self._pack_channels(channels)
-        print("Packed channels (hex):", payload.hex(" "))
-        
         crc = self._crc8(bytes([0x16]) + payload)
-        print(f"CRC8: {crc:#04x}")
-        
-        frame = self._assemble_complete_frame(payload, crc)
-        print("Complete frame (hex):", frame.hex(" "))
-        
+        frame = self._assemble_complete_frame(payload, crc)      
+          
         return frame
 
     def _validate_channels(self, channels: list[int]):
